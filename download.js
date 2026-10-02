@@ -4,7 +4,7 @@ const downloadProducts = {
   shame: {
     name: 'Name It. Voice It. Release It.',
     subtitle: 'A Shame Release Process for Women',
-    filename: 'downloads/name-it-voice-it-release-it.pdf',
+    filename: 'downloads/name-it.pdf',
     accentColor: '#171717',
   },
   patterns: {
