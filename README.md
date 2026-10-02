@@ -15,7 +15,7 @@ All copy and links live in `index.html`; colors, typography, and spacing live in
 | Stripe | `https://buy.stripe.com/PLACEHOLDER` | Your payment link |
 | Instagram | `https://www.instagram.com/` | Your profile URL |
 | YouTube | `https://www.youtube.com/` | Your channel URL |
-| Contact | `mailto:hello@catmastersstudio.com` in the business pages | Your active contact inbox; marked `REPLACE WITH ACTIVE CONTACT EMAIL` |
+| Contact | `mailto:studio@catmastersstudio.com` in the business pages | Your active contact inbox; marked `REPLACE WITH ACTIVE CONTACT EMAIL` |
 
 Business pages: `privacy.html`, `terms.html`, `refunds.html`, and `contact.html`. They share `styles.css` and `script.js` with the storefront. Edit policy copy directly in each HTML file and update its displayed revision date when making changes. Footer links are present in every HTML page; keep them in sync when editing navigation.
 
