@@ -1,0 +1,11 @@
+<svg viewBox="0 0 440 440" fill="none" xmlns="http://www.w3.org/2000/svg" width="440" height="440" stroke="#171717" stroke-width="0.7">
+  <circle cx="220" cy="220" r="177" />
+  <circle cx="220" cy="220" r="130" />
+  <ellipse cx="220" cy="220" rx="70" ry="177" />
+  <ellipse cx="220" cy="220" rx="130" ry="177" transform="rotate(45 220 220)" />
+  <ellipse cx="220" cy="220" rx="70" ry="177" transform="rotate(90 220 220)" />
+  <ellipse cx="220" cy="220" rx="130" ry="177" transform="rotate(-45 220 220)" />
+  <path d="M220 22v396M22 220h396" />
+  <circle class="art-dot" cx="220" cy="43" r="5" fill="#171717" stroke="none" />
+  <circle class="art-dot" cx="397" cy="220" r="5" fill="#171717" stroke="none" />
+</svg>
