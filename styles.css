@@ -40,6 +40,26 @@
 .north-star .status i{background:var(--star-gold)}
 .north-star .form-row{border-color:var(--star-gold)}
 .north-star .form-row button{color:var(--star-blue)}
+.north-star .ml-embedded{
+  width:100%;
+  max-width:455px;
+  margin-top:29px;
+}
+.north-star .ml-form-embedContainer{
+  width:100%!important;
+  max-width:100%!important;
+  display:block!important;
+}
+.north-star .ml-form-embedWrapper{
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+}
+.north-star .ml-form-embedBody,
+.north-star .ml-form-successBody{
+  padding-left:0!important;
+  padding-right:0!important;
+}
 /* Business pages share the storefront foundation */
 .business-page{min-height:100vh;display:flex;flex-direction:column}
 .business-main{width:100%;flex:1;padding-top:70px;padding-bottom:80px}
