@@ -169,3 +169,14 @@
   .free-guide-inner{grid-template-columns:minmax(0,1fr)}
   .free-guide-action{grid-column:1;max-width:none;padding-top:20px;border-top:1px solid var(--ink)}
 }
+
+/* Studio Shop gateway and dedicated page; cards use the shared shop system. */
+.shop-gateway,.shop-page{padding-top:61.6px;padding-bottom:71.2px}
+.shop-gateway h2{margin-top:20px}
+.shop-intro{max-width:650px;margin-top:24px;font-size:18px;color:var(--muted)}
+.shop-page-intro{margin-bottom:37px}
+.shop-page h1{font-size:clamp(48px,5.65vw,86px);line-height:1.08;letter-spacing:-2.4px;margin-top:20px}
+@media(max-width:768px){
+  .shop-gateway,.shop-page{padding-top:41.6px;padding-bottom:44px}
+  .shop-page-intro{margin-bottom:28px}
+}
