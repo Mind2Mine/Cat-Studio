@@ -180,3 +180,44 @@
   .shop-gateway,.shop-page{padding-top:41.6px;padding-bottom:44px}
   .shop-page-intro{margin-bottom:28px}
 }
+
+/* Studio Shop editorial catalog: reusable offer rows, scoped to this page. */
+.shop-page .shop-page-intro{margin-bottom:72px}
+.shop-page .shop-category{border-top:1px solid var(--line);padding-top:24px}
+.shop-page .shop-category+.shop-category{margin-top:56px}
+.shop-page .shop-category>h2{font-family:var(--sans);font-size:14px;line-height:1.65;letter-spacing:2px;font-weight:500}
+.shop-page .shop-offer{display:flex;align-items:flex-start;gap:8%;padding:48px 0}
+.shop-page .shop-offer+.shop-offer{border-top:1px solid var(--line)}
+.shop-page .shop-offer__heading{flex:1;min-width:0}
+.shop-page .shop-offer h3{font-size:clamp(32px,3.4vw,48px);line-height:1.12;letter-spacing:-1px;overflow-wrap:break-word}
+.shop-page .shop-offer__meta{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:12px;letter-spacing:1.3px;margin-bottom:18px}
+.shop-page .shop-offer__body{flex:1.2;min-width:0;max-width:620px}
+.shop-page .shop-offer__description{font-size:18px;overflow-wrap:break-word}
+.shop-page .shop-offer__description p+p{margin-top:16px}
+.shop-page .shop-offer__subtitle{font-family:var(--serif);font-size:24px;line-height:1.4;margin-top:20px}
+.shop-page .shop-offer__price{margin-top:28px;font-size:20px}
+.shop-page .shop-offer__availability{margin-top:8px;font-size:14px;letter-spacing:.5px}
+.shop-page .shop-offer__action{display:inline-flex;align-items:center;min-height:44px;margin-top:20px;padding:8px 0;border:0;border-bottom:1px solid var(--ink);border-radius:0;background:transparent;color:var(--ink);font-size:16px;text-align:left}
+.shop-page a.shop-offer__action:hover{opacity:.6}
+.shop-page .shop-offer__action:disabled{opacity:1;cursor:not-allowed;border-bottom-color:transparent}
+.shop-page .shop-offer__details{margin:24px 0 0;padding-left:20px;line-height:1.65}
+.shop-page .shop-offer__details li+li{margin-top:8px}
+@media(max-width:768px){
+  .shop-page .shop-page-intro{margin-bottom:48px}
+  .shop-page .shop-category+.shop-category{margin-top:32px}
+  .shop-page .shop-category>h2{letter-spacing:1.5px}
+  .shop-page .shop-offer{flex-direction:column;gap:24px;padding:32px 0}
+  .shop-page .shop-offer__body{width:100%;max-width:none}
+  .shop-page .shop-offer__price{margin-top:24px}
+}
+
+/* Editorial offer with an uncropped product cover. */
+.shop-page .shop-offer--with-cover{align-items:center}
+.shop-page .shop-offer__cover{flex:1;min-width:0;display:flex;justify-content:center}
+.shop-page .shop-offer__cover img{display:block;width:100%;max-width:360px;height:auto}
+.shop-page .shop-offer--with-cover .shop-offer__description{margin-top:24px}
+@media(max-width:768px){
+  .shop-page .shop-offer__cover{width:100%}
+  .shop-page .shop-offer__cover img{max-width:320px}
+  .shop-page .shop-offer--with-cover{gap:32px}
+}
