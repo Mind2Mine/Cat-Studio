@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Your Natal Transit Reading | Cat Masters Studio</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+  <style>
+    .intake-content{max-width:820px}
+    .intake-intro p+p{margin-top:18px}
+    .intake-note{margin-top:32px;padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .intake-note p+p{margin-top:8px}
+    .intake-form{max-width:none;margin-top:40px}
+    .intake-fields{display:flex;flex-direction:column;gap:28px}
+    .intake-field{min-width:0}
+    .intake-field label{display:block;line-height:1.5;margin-bottom:10px}
+    .intake-field input,.intake-field textarea{display:block;width:100%;min-width:0;min-height:48px;border:1px solid var(--line);background:#F8F5EF;border-radius:0;padding:12px;font:inherit;color:var(--ink)}
+    .intake-field textarea{resize:vertical;line-height:1.6}
+    .intake-field textarea:focus-visible{outline:2px solid var(--ink);outline-offset:5px}
+    .intake-help{font-size:15px;line-height:1.6;margin-top:10px}
+    .intake-focus{margin-top:48px;padding-top:32px;border-top:1px solid var(--line)}
+    .intake-focus h2{font-size:clamp(30px,4vw,42px);margin-bottom:28px}
+    .intake-confirmation{display:flex;align-items:flex-start;gap:12px;margin-top:32px;line-height:1.6}
+    .intake-confirmation input{flex:none;width:20px;height:20px;margin:4px 0 0;padding:0;accent-color:var(--ink)}
+    .intake-form .button{border:1px solid var(--ink);line-height:1.5;max-width:100%}
+    .intake-form .button:disabled{cursor:not-allowed;opacity:.6;transform:none}
+    .intake-success:not([hidden]){margin-top:40px;padding-top:32px;border-top:1px solid var(--line)}
+    .intake-success h2{margin-bottom:24px}
+    .intake-success p+p{margin-top:18px}
+    @media(max-width:700px){.intake-fields{gap:24px}.intake-focus{margin-top:32px;padding-top:24px}}
+  </style>
+</head>
+<body class="business-page">
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Cat Masters Studio home">CAT MASTERS <span>STUDIO</span></a>
+    <nav aria-label="Main navigation"><a href="shop.html">Studio Shop</a><a href="index.html#astrology">Astrology</a><a href="index.html#app">The App</a><a href="index.html#about">About</a></nav>
+  </header>
+  <main class="business-main section-wrap">
+    <article class="policy-content intake-content" aria-labelledby="page-title">
+      <p class="eyebrow">PERSONALIZED ASTROLOGY</p>
+      <h1 id="page-title">Your Natal Transit Reading</h1>
+      <div class="intake-intro">
+        <p>Thank you for your purchase.</p>
+        <p>Use the form below to send me the birth information, delivery email, and area of your life you would most like clarity or support around.</p>
+        <p>Your natal transit report and recorded reading will be created specifically for you and delivered within 3–5 days.</p>
+      </div>
+      <aside class="intake-note" aria-label="Exact birth time requirement">
+        <p><strong>Exact birth time is required for accurate house placements.</strong></p>
+        <p>If you do not know your exact birth time, please do not guess.</p>
+      </aside>
+      <form class="intake-form" id="natal-transit-intake" action="https://formspree.io/f/xjygzjaz" method="POST">
+        <input type="hidden" name="product_name" value="Personalized Natal Transit Report + Recorded Reading">
+        <input type="hidden" name="_subject" value="New Natal Transit Intake">
+        <div class="intake-fields">
+          <div class="intake-field">
+            <label for="full_name">Full Name (required)</label>
+            <input id="full_name" name="full_name" type="text" required autocomplete="name">
+          </div>
+          <div class="intake-field">
+            <label for="delivery_email">What email address would you like your report + recorded reading delivered to? (required)</label>
+            <input id="delivery_email" name="delivery_email" type="email" required autocomplete="email" aria-describedby="delivery_email-help">
+            <p class="intake-help" id="delivery_email-help">Your completed report and recorded reading will be sent to this address.</p>
+          </div>
+          <div class="intake-field">
+            <label for="birth_date">Birth Date (required)</label>
+            <input id="birth_date" name="birth_date" type="date" required>
+          </div>
+          <div class="intake-field">
+            <label for="birth_time">Exact Birth Time (required)</label>
+            <input id="birth_time" name="birth_time" type="time" required aria-describedby="birth_time-help">
+            <p class="intake-help" id="birth_time-help">Please use the exact time shown on your birth certificate or official birth record if known. Do not guess.</p>
+          </div>
+          <div class="intake-field">
+            <label for="birth_city">Birth City (required)</label>
+            <input id="birth_city" name="birth_city" type="text" required>
+          </div>
+          <div class="intake-field">
+            <label for="birth_region">State / Province / Region (required)</label>
+            <input id="birth_region" name="birth_region" type="text" required>
+          </div>
+          <div class="intake-field">
+            <label for="birth_country">Country (required)</label>
+            <input id="birth_country" name="birth_country" type="text" required>
+          </div>
+          <div class="intake-field">
+            <label for="current_city">Current City (required)</label>
+            <input id="current_city" name="current_city" type="text" required aria-describedby="current_city-help">
+            <p class="intake-help" id="current_city-help">Where are you currently living?</p>
+          </div>
+        </div>
+        <section class="intake-focus" aria-labelledby="focus-title">
+          <h2 id="focus-title">What would you like me to look at?</h2>
+          <div class="intake-fields">
+          <div class="intake-field">
+            <label for="reading_focus">What would you most like clarity or insight around in this reading? (required)</label>
+            <textarea id="reading_focus" name="reading_focus" rows="5" required aria-describedby="reading_focus-help"></textarea>
+            <p class="intake-help" id="reading_focus-help">For example: money, work, purpose, creativity, relationships, a major transition, a decision you are facing, an area where you feel stuck, or simply what feels most important in your life right now.</p>
+          </div>
+          <div class="intake-field">
+            <label for="support_needed">What would you most like support with in this area? (required)</label>
+            <textarea id="support_needed" name="support_needed" rows="5" required></textarea>
+          </div>
+          <div class="intake-field">
+            <label for="specific_question">Is there a specific question you would like me to hold while I read your chart? (optional)</label>
+            <textarea id="specific_question" name="specific_question" rows="5"></textarea>
+          </div>
+          <div class="intake-field">
+            <label for="desired_outcome">What outcome or change are you hoping for? (required)</label>
+            <textarea id="desired_outcome" name="desired_outcome" rows="5" required></textarea>
+          </div>
+          <div class="intake-field">
+            <label for="additional_context">Is there anything else you would like me to know? (optional)</label>
+            <textarea id="additional_context" name="additional_context" rows="5"></textarea>
+          </div>
+          </div>
+        </section>
+        <label class="intake-confirmation" for="birth_data_confirmation">
+          <input type="checkbox" id="birth_data_confirmation" name="birth_data_confirmation" value="confirmed" required>
+          <span>I confirm that the birth information I entered is accurate to the best of my knowledge.</span>
+        </label>
+        <button class="button" type="submit">Submit My Birth Information →</button>
+      </form>
+      <section class="intake-success" id="intake-success" hidden aria-labelledby="success-title" role="status">
+        <h2 id="success-title">Information received.</h2>
+        <p>I’ll review your birth chart, current transits, and the area you’ve asked me to focus on.</p>
+        <p>Your personalized report and recorded reading will be delivered to the email address you provided within 3–5 days.</p>
+      </section>
+    </article>
+  </main>
+  <footer class="section-wrap"><a class="brand" href="index.html">CAT MASTERS <span>STUDIO</span></a><div class="footer-bottom"><p>© <span id="year"></span> Cat Masters Studio. All rights reserved.</p><nav aria-label="Footer navigation"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="refunds.html">Refund Policy</a><a href="contact.html">Contact</a></nav></div></footer>
+</body>
+</html>
