@@ -5,13 +5,12 @@ const intakeForm = document.getElementById('natal-transit-intake');
 if (intakeForm) {
   const fields = [...intakeForm.querySelectorAll('input:not([type="hidden"]), textarea')];
   const email = intakeForm.elements.delivery_email;
-  const birthTime = intakeForm.elements.birth_time;
   const errors = new Map();
   const requiredMessages = {
     full_name: 'Please enter your full name.',
     delivery_email: 'Please enter a valid email address.',
     birth_date: 'Please enter your birth date.',
-    birth_time: 'Please enter your exact birth time including AM or PM.',
+    birth_time: 'Please enter your exact birth time.',
     birth_city: 'Please enter your birth city.',
     birth_region: 'Please enter your state, province, or region.',
     birth_country: 'Please enter your birth country.',
@@ -32,8 +31,6 @@ if (intakeForm) {
       const domain = field.value.trim().split('@').pop().toLowerCase();
       if (field.validity.typeMismatch) message = 'Please enter a valid email address.';
       else if (mistypedDomains.has(domain)) message = 'Please check your email address. The domain may be mistyped.';
-    } else if (field === birthTime && field.value && !/^(0?[1-9]|1[0-2]):[0-5][0-9] [AP]M$/i.test(field.value)) {
-      message = requiredMessages.birth_time;
     }
     if (!message && !field.validity.valid) message = field.validationMessage;
     field.setCustomValidity(message);
@@ -74,7 +71,6 @@ if (intakeForm) {
       firstInvalid?.scrollIntoView({ block: 'center', behavior: 'instant' });
       return;
     }
-    birthTime.value = birthTime.value.toUpperCase();
     // Let the browser POST to Formspree, as in the original intake flow.
   });
 }
