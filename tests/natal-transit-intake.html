@@ -54,6 +54,8 @@ document.querySelector('iframe').addEventListener('load', async function () {
   };
   const log = [];
   try {
+    assert(form.elements.birth_time.value === '' && !form.elements.birth_time.hasAttribute('placeholder'), 'Birth time must load blank without a placeholder');
+    assert(form.querySelectorAll('[name="delivery_email"]').length === 1 && !form.querySelector('[name="email"]'), 'Email field must match the original flow without duplicates');
     for (const field of fields.filter(field => field.required)) {
       reset();
       if (field.type === 'checkbox') field.checked = false;
@@ -109,8 +111,8 @@ document.querySelector('iframe').addEventListener('load', async function () {
     const birthTime = form.elements.birth_time;
     assert(birthTime.defaultValue === '' && birthTime.autocomplete === 'off', 'Birth time has a default or enables autocomplete');
     birthTime.value = '';
-    assert(birthTime.value === '' && birthTime.placeholder === '12:33 AM', 'Placeholder mistaken for entered value');
-    log.push('PASS: birth time has no default value; example is only a placeholder');
+    assert(birthTime.value === '' && !birthTime.hasAttribute('placeholder'), 'Birth time must be blank without a placeholder');
+    log.push('PASS: birth time has no default value or placeholder');
     results.textContent = log.join('\n') + '\nALL CHECKS PASSED';
   } catch (error) { results.textContent = log.join('\n') + '\nFAIL: ' + error.message; }
 });
