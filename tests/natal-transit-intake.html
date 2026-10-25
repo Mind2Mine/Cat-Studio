@@ -32,6 +32,26 @@ document.querySelector('iframe').addEventListener('load', async function () {
     await new Promise(resolve => setTimeout(resolve, 0));
   };
   const errorFor = field => d.getElementById(`${field.id}-error`);
+  const expectedMessages = {
+    full_name: 'Please enter your full name.',
+    delivery_email: 'Please enter a valid email address.',
+    birth_date: 'Please enter your birth date.',
+    birth_time: 'Please enter your exact birth time including AM or PM.',
+    birth_city: 'Please enter your birth city.',
+    birth_region: 'Please enter your state, province, or region.',
+    birth_country: 'Please enter your birth country.',
+    current_city: 'Please enter your current city.',
+    reading_focus: 'Please tell me what you would like clarity around.',
+    support_needed: 'Please tell me what you would like support with.',
+    desired_outcome: 'Please tell me what outcome or change you are hoping for.',
+    birth_data_confirmation: 'Please confirm that your birth information is accurate.',
+  };
+  let scrolledField;
+  const originalScroll = w.HTMLElement.prototype.scrollIntoView;
+  w.HTMLElement.prototype.scrollIntoView = function (options) {
+    scrolledField = this;
+    originalScroll.call(this, options);
+  };
   const log = [];
   try {
     for (const field of fields.filter(field => field.required)) {
@@ -41,9 +61,26 @@ document.querySelector('iframe').addEventListener('load', async function () {
       await submit();
       assert(requests.length === 0, `${field.id} allowed a request`);
       assert(!errorFor(field).hidden && errorFor(field).textContent, `${field.id} lacks inline error`);
-      assert(d.activeElement === field, `${field.id} was not focused`);
+      assert(d.activeElement === field && scrolledField === field, `${field.id} was not focused and scrolled`);
+      assert(errorFor(field).textContent === expectedMessages[field.id], `${field.id} lacks specific message`);
+      assert(field.getAttribute('aria-invalid') === 'true', `${field.id} lacks aria-invalid`);
+      assert(field.getAttribute('aria-describedby').split(' ').includes(errorFor(field).id), `${field.id} lacks error association`);
+      assert(w.getComputedStyle(field).outlineStyle === 'solid', `${field.id} lacks invalid styling`);
+      reset();
+      assert(errorFor(field).hidden && errorFor(field).textContent === '', `${field.id} correction left an error`);
+      assert(!field.hasAttribute('aria-invalid'), `${field.id} correction left invalid styling`);
     }
-    log.push('PASS: every required field, checkbox, inline errors, and first-invalid focus');
+    log.push('PASS: field-specific errors, accessibility, invalid styling, correction, focus and scroll');
+    reset();
+    for (const field of fields.filter(field => field.required)) {
+      if (field.type === 'checkbox') field.checked = false;
+      else field.value = '';
+    }
+    await submit();
+    assert(requests.length === 0, 'Blank form sent a request');
+    assert(fields.filter(field => field.required).every(field => !errorFor(field).hidden), 'Not all errors shown together');
+    assert(d.activeElement === form.elements.full_name && scrolledField === form.elements.full_name, 'Wrong first invalid field');
+    log.push('PASS: all missing-field errors shown together; first field focused and scrolled');
     for (const value of ['invalid-email', 'client@gmmail.com', 'client@gmial.com', 'client@gamil.com', 'client@gmail.co', 'client@GMIAL.COM']) {
       reset(); const email = form.elements.email; email.value = value;
       await submit();

@@ -14,21 +14,33 @@ if (intakeForm) {
   status.hidden = true;
   intakeForm.append(status);
   const errors = new Map();
+  const requiredMessages = {
+    full_name: 'Please enter your full name.',
+    delivery_email: 'Please enter a valid email address.',
+    birth_date: 'Please enter your birth date.',
+    birth_time: 'Please enter your exact birth time including AM or PM.',
+    birth_city: 'Please enter your birth city.',
+    birth_region: 'Please enter your state, province, or region.',
+    birth_country: 'Please enter your birth country.',
+    current_city: 'Please enter your current city.',
+    reading_focus: 'Please tell me what you would like clarity around.',
+    support_needed: 'Please tell me what you would like support with.',
+    desired_outcome: 'Please tell me what outcome or change you are hoping for.',
+    birth_data_confirmation: 'Please confirm that your birth information is accurate.',
+  };
   const mistypedDomains = new Set(['gmmail.com', 'gmial.com', 'gamil.com', 'gmail.co']);
 
   const validateField = (field) => {
     field.setCustomValidity('');
     let message = '';
     if (field.required && (field.type === 'checkbox' ? !field.checked : !field.value.trim())) {
-      message = field.type === 'checkbox'
-        ? 'Please confirm that your birth information is accurate.'
-        : 'Please complete this required field.';
+      message = requiredMessages[field.id] || 'Please complete this required field.';
     } else if (field === email && field.value) {
       const domain = field.value.trim().split('@').pop().toLowerCase();
       if (field.validity.typeMismatch) message = 'Please enter a valid email address.';
       else if (mistypedDomains.has(domain)) message = 'Please check your email address. The domain may be mistyped.';
     } else if (field === birthTime && field.value && !/^(0?[1-9]|1[0-2]):[0-5][0-9] [AP]M$/i.test(field.value)) {
-      message = 'Enter your exact birth time with AM or PM, such as 12:33 AM.';
+      message = requiredMessages.birth_time;
     }
     if (!message && !field.validity.valid) message = field.validationMessage;
     field.setCustomValidity(message);
@@ -42,7 +54,7 @@ if (intakeForm) {
   fields.forEach((field) => {
     const error = document.createElement('p');
     error.id = `${field.id}-error`;
-    error.className = 'intake-help';
+    error.className = 'intake-help intake-error';
     error.hidden = true;
     error.setAttribute('aria-live', 'polite');
     const container = field.type === 'checkbox' ? field.closest('label') : field;
@@ -66,7 +78,9 @@ if (intakeForm) {
     status.hidden = true;
     fields.forEach(validateField);
     if (!intakeForm.checkValidity()) {
-      fields.find((field) => !field.validity.valid)?.focus();
+      const firstInvalid = fields.find((field) => !field.validity.valid);
+      firstInvalid?.focus({ preventScroll: true });
+      firstInvalid?.scrollIntoView({ block: 'center', behavior: 'instant' });
       return;
     }
     birthTime.value = birthTime.value.toUpperCase();
