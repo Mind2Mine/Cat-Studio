@@ -72,8 +72,19 @@
           </div>
           <div class="intake-field">
             <label for="birth_time">Exact Birth Time (required)</label>
-            <input id="birth_time" name="birth_time" type="text" autocomplete="off" required pattern="(0?[1-9]|1[0-2]):[0-5][0-9] [AaPp][Mm]" title="Enter the exact birth time in hour:minute AM/PM format, such as 12:33 AM." aria-describedby="birth_time-help">
-            <p class="intake-help" id="birth_time-help">Exact birth time is required. Enter it with AM or PM, for example 12:33 AM. Please use the exact time shown on your birth certificate or official birth record if known. Do not guess.</p>
+
+            <input
+              id="birth_time"
+              name="birth_time"
+              type="time"
+              required
+              autocomplete="off"
+              aria-describedby="birth_time-help"
+            >
+
+            <p class="intake-help" id="birth_time-help">
+              Exact birth time is required. Please use the exact time shown on your birth certificate or official birth record if known. Do not guess.
+            </p>
           </div>
           <div class="intake-field">
             <label for="birth_city">Birth City (required)</label>
