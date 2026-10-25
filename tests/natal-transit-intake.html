@@ -1,0 +1,85 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Intake browser checks</title>
+<pre id="results">Running…</pre>
+<iframe src="../natal-transit-intake.html" title="Intake under test"></iframe>
+<script>
+const results = document.getElementById('results');
+document.querySelector('iframe').addEventListener('load', async function () {
+  const w = this.contentWindow, d = w.document;
+  const form = d.getElementById('natal-transit-intake');
+  const success = d.getElementById('intake-success');
+  const fields = [...form.querySelectorAll('input:not([type="hidden"]), textarea')];
+  let requests = [], response = { ok: true };
+  w.fetch = async (url, options) => {
+    requests.push({ url, data: options.body });
+    if (response instanceof Error) throw response;
+    return response;
+  };
+  const assert = (condition, message) => { if (!condition) throw Error(message); };
+  const reset = () => {
+    form.reset(); form.hidden = false; success.hidden = true; requests = [];
+    for (const field of fields) {
+      if (field.type === 'checkbox') field.checked = true;
+      else if (field.required) field.value = field.type === 'date' ? '1990-01-01'
+        : field.type === 'email' ? 'client@gmail.com'
+        : field.id === 'birth_time' ? '12:33 am' : 'Example';
+      field.dispatchEvent(new w.Event('input'));
+    }
+  };
+  const submit = async () => {
+    form.requestSubmit();
+    await new Promise(resolve => setTimeout(resolve, 0));
+  };
+  const errorFor = field => d.getElementById(`${field.id}-error`);
+  const log = [];
+  try {
+    for (const field of fields.filter(field => field.required)) {
+      reset();
+      if (field.type === 'checkbox') field.checked = false;
+      else field.value = '';
+      await submit();
+      assert(requests.length === 0, `${field.id} allowed a request`);
+      assert(!errorFor(field).hidden && errorFor(field).textContent, `${field.id} lacks inline error`);
+      assert(d.activeElement === field, `${field.id} was not focused`);
+    }
+    log.push('PASS: every required field, checkbox, inline errors, and first-invalid focus');
+    for (const value of ['invalid-email', 'client@gmmail.com', 'client@gmial.com', 'client@gamil.com', 'client@gmail.co', 'client@GMIAL.COM']) {
+      reset(); const email = form.elements.email; email.value = value;
+      await submit();
+      assert(requests.length === 0 && !errorFor(email).hidden, `Email accepted: ${value}`);
+      email.value = 'client@gmail.com'; email.dispatchEvent(new w.Event('input'));
+      assert(!email.validity.customError && errorFor(email).hidden, 'Email correction did not clear error');
+    }
+    log.push('PASS: malformed email, all listed domain typos, and error clearing');
+    for (const value of ['00:33', '13:33 PM', '12:60 AM', '12:33']) {
+      reset(); form.elements.birth_time.value = value; await submit();
+      assert(requests.length === 0 && !errorFor(form.elements.birth_time).hidden, `Time accepted: ${value}`);
+    }
+    log.push('PASS: invalid and ambiguous birth times blocked');
+    reset(); form.elements.full_name.value = '   '; await submit();
+    assert(requests.length === 0, 'Whitespace-only name accepted');
+    reset(); await submit();
+    assert(requests.length === 1 && requests[0].url === 'https://formspree.io/f/xjygzjaz', 'Wrong endpoint or request count');
+    assert(requests[0].data.get('email') === 'client@gmail.com' && !requests[0].data.has('delivery_email'), 'Wrong email field name');
+    assert(requests[0].data.get('birth_time') === '12:33 AM', 'Time missing explicit AM/PM');
+    assert(requests[0].data.get('specific_question') === '' && requests[0].data.get('additional_context') === '', 'Optional fields not blank');
+    assert(!success.hidden && form.hidden, 'Accepted submission did not show success');
+    log.push('PASS: valid submission, blank optional fields, email name, and AM/PM payload');
+    for (const failure of [{ ok: false }, new Error('Network failure')]) {
+      reset(); response = failure; await submit();
+      assert(success.hidden && !form.hidden, 'Failed submission showed success');
+      assert(!form.lastElementChild.hidden && !form.querySelector('button').disabled, 'Failure lacks retry message');
+    }
+    log.push('PASS: HTTP and network failures keep success hidden and allow retry');
+    reset(); let resolveResponse;
+    w.fetch = () => new Promise(resolve => { resolveResponse = resolve; });
+    form.requestSubmit();
+    assert(success.hidden, 'Success shown before response');
+    resolveResponse({ ok: true }); await new Promise(resolve => setTimeout(resolve, 0));
+    assert(!success.hidden, 'Success missing after acceptance');
+    log.push('PASS: success waits for accepted response');
+    results.textContent = log.join('\n') + '\nALL CHECKS PASSED';
+  } catch (error) { results.textContent = log.join('\n') + '\nFAIL: ' + error.message; }
+});
+</script>
