@@ -4,15 +4,8 @@ document.getElementById('year').textContent = new Date().getFullYear();
 const intakeForm = document.getElementById('natal-transit-intake');
 if (intakeForm) {
   const fields = [...intakeForm.querySelectorAll('input:not([type="hidden"]), textarea')];
-  const email = intakeForm.elements.email;
+  const email = intakeForm.elements.delivery_email;
   const birthTime = intakeForm.elements.birth_time;
-  const button = intakeForm.querySelector('button[type="submit"]');
-  const success = document.getElementById('intake-success');
-  const status = document.createElement('p');
-  status.className = 'intake-help';
-  status.setAttribute('role', 'alert');
-  status.hidden = true;
-  intakeForm.append(status);
   const errors = new Map();
   const requiredMessages = {
     full_name: 'Please enter your full name.',
@@ -72,38 +65,17 @@ if (intakeForm) {
 
   // Handle presentation ourselves while still checking every native constraint below.
   intakeForm.noValidate = true;
-  intakeForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    if (button.disabled) return;
-    status.hidden = true;
+  intakeForm.addEventListener('submit', (event) => {
     fields.forEach(validateField);
     if (!intakeForm.checkValidity()) {
+      event.preventDefault();
       const firstInvalid = fields.find((field) => !field.validity.valid);
       firstInvalid?.focus({ preventScroll: true });
       firstInvalid?.scrollIntoView({ block: 'center', behavior: 'instant' });
       return;
     }
     birthTime.value = birthTime.value.toUpperCase();
-    button.disabled = true;
-    intakeForm.setAttribute('aria-busy', 'true');
-    try {
-      const response = await fetch(intakeForm.action, {
-        method: 'POST',
-        headers: { Accept: 'application/json' },
-        body: new FormData(intakeForm),
-      });
-      if (!response.ok) throw new Error('Form submission failed');
-      intakeForm.hidden = true;
-      success.hidden = false;
-      success.setAttribute('tabindex', '-1');
-      success.focus();
-    } catch {
-      status.textContent = 'Your information could not be sent. Please try again.';
-      status.hidden = false;
-    } finally {
-      button.disabled = false;
-      intakeForm.removeAttribute('aria-busy');
-    }
+    // Let the browser POST to Formspree, as in the original intake flow.
   });
 }
 

@@ -10,12 +10,12 @@ document.querySelector('iframe').addEventListener('load', async function () {
   const form = d.getElementById('natal-transit-intake');
   const success = d.getElementById('intake-success');
   const fields = [...form.querySelectorAll('input:not([type="hidden"]), textarea')];
-  let requests = [], response = { ok: true };
-  w.fetch = async (url, options) => {
-    requests.push({ url, data: options.body });
-    if (response instanceof Error) throw response;
-    return response;
-  };
+  let requests = [];
+  // Observe the real submit handler, then prevent navigation only in this test.
+  form.addEventListener('submit', (event) => {
+    if (!event.defaultPrevented) requests.push({ url: form.action, data: new w.FormData(form) });
+    event.preventDefault();
+  });
   const assert = (condition, message) => { if (!condition) throw Error(message); };
   const reset = () => {
     form.reset(); form.hidden = false; success.hidden = true; requests = [];
@@ -82,7 +82,7 @@ document.querySelector('iframe').addEventListener('load', async function () {
     assert(d.activeElement === form.elements.full_name && scrolledField === form.elements.full_name, 'Wrong first invalid field');
     log.push('PASS: all missing-field errors shown together; first field focused and scrolled');
     for (const value of ['invalid-email', 'client@gmmail.com', 'client@gmial.com', 'client@gamil.com', 'client@gmail.co', 'client@GMIAL.COM']) {
-      reset(); const email = form.elements.email; email.value = value;
+      reset(); const email = form.elements.delivery_email; email.value = value;
       await submit();
       assert(requests.length === 0 && !errorFor(email).hidden, `Email accepted: ${value}`);
       email.value = 'client@gmail.com'; email.dispatchEvent(new w.Event('input'));
@@ -98,24 +98,19 @@ document.querySelector('iframe').addEventListener('load', async function () {
     assert(requests.length === 0, 'Whitespace-only name accepted');
     reset(); await submit();
     assert(requests.length === 1 && requests[0].url === 'https://formspree.io/f/xjygzjaz', 'Wrong endpoint or request count');
-    assert(requests[0].data.get('email') === 'client@gmail.com' && !requests[0].data.has('delivery_email'), 'Wrong email field name');
+    assert(requests[0].data.get('delivery_email') === 'client@gmail.com' && !requests[0].data.has('email'), 'Original email field name not restored');
+    assert(form.method === 'post' && form.enctype === 'application/x-www-form-urlencoded', 'Original native POST configuration changed');
     assert(requests[0].data.get('birth_time') === '12:33 AM', 'Time missing explicit AM/PM');
     assert(requests[0].data.get('specific_question') === '' && requests[0].data.get('additional_context') === '', 'Optional fields not blank');
-    assert(!success.hidden && form.hidden, 'Accepted submission did not show success');
-    log.push('PASS: valid submission, blank optional fields, email name, and AM/PM payload');
-    for (const failure of [{ ok: false }, new Error('Network failure')]) {
-      reset(); response = failure; await submit();
-      assert(success.hidden && !form.hidden, 'Failed submission showed success');
-      assert(!form.lastElementChild.hidden && !form.querySelector('button').disabled, 'Failure lacks retry message');
-    }
-    log.push('PASS: HTTP and network failures keep success hidden and allow retry');
-    reset(); let resolveResponse;
-    w.fetch = () => new Promise(resolve => { resolveResponse = resolve; });
-    form.requestSubmit();
-    assert(success.hidden, 'Success shown before response');
-    resolveResponse({ ok: true }); await new Promise(resolve => setTimeout(resolve, 0));
-    assert(!success.hidden, 'Success missing after acceptance');
-    log.push('PASS: success waits for accepted response');
+    assert(success.hidden && !form.hidden, 'Local success shown before Formspree navigation');
+    log.push('PASS: validated native POST, original field name and endpoint, optional fields, AM/PM payload');
+    log.push('PASS: local success stays hidden; Formspree handles the submission response');
+    reset();
+    const birthTime = form.elements.birth_time;
+    assert(birthTime.defaultValue === '' && birthTime.autocomplete === 'off', 'Birth time has a default or enables autocomplete');
+    birthTime.value = '';
+    assert(birthTime.value === '' && birthTime.placeholder === '12:33 AM', 'Placeholder mistaken for entered value');
+    log.push('PASS: birth time has no default value; example is only a placeholder');
     results.textContent = log.join('\n') + '\nALL CHECKS PASSED';
   } catch (error) { results.textContent = log.join('\n') + '\nFAIL: ' + error.message; }
 });
